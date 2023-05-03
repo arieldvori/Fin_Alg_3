@@ -1,7 +1,7 @@
 import socket
 
 HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 8080        # The port used by the server
+PORT = 8081        # The port used by the server
 
 # Define the HTTP response
 response = b"""\

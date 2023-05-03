@@ -106,7 +106,7 @@ def http_app_tcp():
     import socket
 
     HOST = '127.0.0.1'  # The server's hostname or IP address
-    PORT = 8080  # The port used by the server
+    PORT = 8081  # The port used by the server
 
     # Create a TCP/IP socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
@@ -125,8 +125,32 @@ def http_app_tcp():
         print(response.decode())
 
 
-#def http_app_Reliable_UDP():
+def http_app_Reliable_UDP():
+    import socket
+    import time
 
+    # Define the server address and port
+    SERVER_ADDRESS = ('127.0.0.1', 5000)
+
+    # Define the HTTP request
+    request = b'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n'
+
+    # Create a reliable UDP socket
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    client_socket.settimeout(1)
+
+    # Send the request to the server
+    for i in range(3):
+        try:
+            client_socket.sendto(request, SERVER_ADDRESS)
+            response, server_address = client_socket.recvfrom(4096)
+            break
+        except socket.timeout:
+            print(f"Attempt {i + 1} timed out")
+            time.sleep(1)
+
+    # Print the response from the server
+    print(response.decode())
 
 
 if __name__ == '__main__':
