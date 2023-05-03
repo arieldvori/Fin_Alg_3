@@ -72,7 +72,7 @@ client.moveByAngleZAsync(0, 0, -1, new_yaw, 5)
 client.simPause(False)  # if there is surprise action it will ignore it so for now we are ignoring this.
 
 airsim.wait_key('Press any key to move forward 5 second and turning 45 degrees')
-print("moving forward 5 second second and turning 45 degrees")
+print("moving forward 5 seconds and turning 45 degrees")
 # set the yaw angle to turn the drone by
 angle_degrees = 45  # 45 degree turn
 angle_radians = math.radians(angle_degrees)  # convert to radians
@@ -94,12 +94,15 @@ _, _, yaw = airsim.to_eularian_angles(orientation)
 # Add 45 degrees to the current yaw angle
 new_yaw = yaw + airsim.utils.to_quaternion(0, 0, angle_radians)
 
-# Move the drone to the new yaw angle
-client.moveByAngleZAsync(0, 0, -1, new_yaw, duration)
+# # Move the drone to the new yaw angle
+# client.moveByAngleZAsync(0, 0, -1, new_yaw, duration)
 
 # Move the drone forward and laterally
 airsim_resp = client.moveByVelocityAsync(vx * math.cos(angle_radians) + vy * math.sin(angle_radians),
                                          vy * math.cos(angle_radians) - vx * math.sin(angle_radians), vz, duration)
+
+# Move the drone to the new yaw angle
+client.moveByAngleZAsync(0, 0, -1, new_yaw, duration)
 
 state = client.getMultirotorState()
 print("state: %s" % pprint.pformat(state))
