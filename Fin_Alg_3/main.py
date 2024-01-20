@@ -1,51 +1,37 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
 def weighted_round_robin(rights: list[float], valuations: list[list[float]], y: float):
+    """
+    >>> weighted_round_robin([1, 2, 4],[[11, 11, 22, 33, 44],[11, 22, 44, 55, 66],[11, 33, 22, 11, 66]],0.5) # diff items diff rights
+    >>> weighted_round_robin([1, 1, 1],[[11, 11, 11, 11],[22, 22, 22, 22],[33, 33, 33, 33]],0.5) #same items same rights
+    >>> weighted_round_robin([1, 1, 1],[[11, 11, 22, 33],[11, 22, 44, 55],[11, 33, 22, 11]],0.5) #diff items same rights
+    >>> weighted_round_robin([1, 2, 4],[[11, 11, 11, 11],[22, 22, 22, 22],[33, 33, 33, 33]],0.5) #same items diff rights
+
+    """
     items = len(valuations[0])
-    items_list = [1] * items
-    fair_rights = [1] * len(rights)
-    curr_items = [0] * len(rights)
-    while items > 0:
-        for i in range(0, len(rights)):
-            fair_rights[i] = rights[i] / (curr_items[i] + y)
-        max_right = max(fair_rights)
-        max_index = fair_rights.index(max_right)  # index of the player with the right to choose
-        for j in range(0, len(valuations[0])):
-            max_desire = max(valuations[max_index])
-            max_d_item = valuations[max_index].index(max_desire)
-            if items_list[max_d_item] == 1:
-                curr_items[max_index] += 1
-                items_list[max_d_item] = 0
+    items_list = [1] * items  # create a list for indication if the item is taken
+    fair_rights = [1] * len(rights)  # create a list to save the calculation of who needs to choose the next item
+    curr_items = [0] * len(rights)  # create a list to save how many items each player have
+
+    while items > 0:  # when there is still items to choose from
+        for i in range(0, len(rights)):  # run over the players
+            fair_rights[i] = rights[i] / (curr_items[i] + y)  # calculate the rights according to the formula
+        max_right = max(fair_rights)  # save the right of the player which have the max right
+        max_index = fair_rights.index(max_right)  # index of the player with the max right to choose next
+        for j in range(0, len(valuations[0])):  # run over the items
+            max_desire = max(valuations[max_index])  # get the desired value of the player who needs to choose
+            max_d_item = valuations[max_index].index(max_desire)  # get the desired index of the player who needs to
+            # choose
+            if items_list[max_d_item] == 1:  # if item is still available
+                curr_items[max_index] += 1  # add 1 to the items count of this player
+                items_list[max_d_item] = 0  # make the item not available
                 print(f"player {max_index} takes item {max_d_item} "
                       f"with value {valuations[max_index][max_d_item]} ")
-                valuations[max_index][max_d_item] = 0
-                break
+                break  # to  calculate the proper right again
             else:
                 valuations[max_index][max_d_item] = 0
         items -= 1
 
 
-rights = [1, 2, 4]
-valuations = [
-    [11, 11, 22, 33, 44],  # Individual A's valuations for items 1, 2, 3, 4
-    [11, 22, 44, 55, 66],  # Individual B's valuations for items 1, 2, 3, 4
-    [11, 33, 22, 11, 66]
-]
-y = 0.5
-
-# Individual C's valuations for items 1, 2, 3, 4
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    weighted_round_robin(rights, valuations, y)
+    import doctest
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    doctest.testmod()
