@@ -1,10 +1,26 @@
 def weighted_round_robin(rights: list[float], valuations: list[list[float]], y: float):
     """
     >>> weighted_round_robin([1, 2, 4],[[11, 11, 22, 33, 44],[11, 22, 44, 55, 66],[11, 33, 22, 11, 66]],0.5) # diff items diff rights
+    player 2 takes item 4 with value 66
+    player 1 takes item 3 with value 55
+    player 2 takes item 1 with value 33
+    player 0 takes item 2 with value 22
+    player 2 takes item 0 with value 11
     >>> weighted_round_robin([1, 1, 1],[[11, 11, 11, 11],[22, 22, 22, 22],[33, 33, 33, 33]],0.5) #same items same rights
+    player 0 takes item 0 with value 11
+    player 1 takes item 1 with value 22
+    player 2 takes item 2 with value 33
+    player 0 takes item 3 with value 11
     >>> weighted_round_robin([1, 1, 1],[[11, 11, 22, 33],[11, 22, 44, 55],[11, 33, 22, 11]],0.5) #diff items same rights
+    player 0 takes item 3 with value 33
+    player 1 takes item 2 with value 44
+    player 2 takes item 1 with value 33
+    player 0 takes item 0 with value 11
     >>> weighted_round_robin([1, 2, 4],[[11, 11, 11, 11],[22, 22, 22, 22],[33, 33, 33, 33]],0.5) #same items diff rights
-
+    player 2 takes item 0 with value 33
+    player 1 takes item 1 with value 22
+    player 2 takes item 2 with value 33
+    player 0 takes item 3 with value 11
     """
     items = len(valuations[0])
     items_list = [1] * items  # create a list for indication if the item is taken
